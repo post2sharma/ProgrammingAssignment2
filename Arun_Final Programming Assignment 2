@@ -1,0 +1,49 @@
+# Function makeCacheMatrix define various function to evaluate inverse of matrix
+
+makeCacheMatrix<- function(x){
+  
+  mat<- x                           # set mat as Matrix "x" passed by user
+  invMat<- NULL                     # set invMat equal to NULL 
+  
+  # Function "set" enables the user to change matrix to generate it's Inverse, invMat is set to null
+  
+  set<- function(y){
+    mat<<-y                  
+    invMat <<- NULL
+  }
+  
+  # get function returns the original matrix
+  
+  get<- function() mat  
+  
+  # Setinverse function enables user to directly pass the inverse of the Matrix
+  
+  setinverse<- function(invM) invMat <<- invM  
+  
+  # getinverse matrix return the inverse Matrix "invMat" this will be null if invMat is not calculated
+  # invMat set either by function setinverse or after calling cacheSolve
+  
+  getinverse<-function()invMat
+  
+  # list of all the function used
+  list(set = set, get=get, getinverse = getinverse, setinverse=setinverse)
+}
+
+# cacheSolve function compute inverse of the Matrix 
+
+cacheSolve <- function(x,...){
+  
+  invMat<- x$getinverse()           # invMat is assigned inverse matrix from makeCacheMatrix
+  
+  if(!is.null(invMat)) {            # incase matrix is already computed return invMat and exit
+    message("getting cached data")
+    return(invMat)
+  }
+  
+  # Below part of code is executed in case inverse of matrix is not computed or matrix is changed
+  
+  data<- x$get()                    
+  invMat<- solve(data,...)
+  x$setinverse(invMat)
+  invMat
+}
